@@ -7,18 +7,23 @@ import android.util.Log
 import android.widget.Toast
 import java.lang.StringBuilder
 
-class MyBroadcastReceiver : BroadcastReceiver() {
-
-    private val TAG = MyBroadcastReceiver::class.java.simpleName
+class MyBroadcastReceiver(var myBroadcastReceiverListener: MyBroadcastReceiverListener) : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent) {
         StringBuilder().apply {
             append("Action: ${intent.action}\n")
             append("URI: ${intent.toUri(Intent.URI_INTENT_SCHEME)}\n")
             toString().also { log ->
-                Log.d(TAG, intent.getStringExtra("data"))
-                Toast.makeText(context, log, Toast.LENGTH_SHORT).show()
+                myBroadcastReceiverListener.getDataFromMyBroadcastReceiver(intent.getStringExtra("data"))
             }
         }
     }
+
+    ///////////
+
+    interface MyBroadcastReceiverListener {
+        fun getDataFromMyBroadcastReceiver(data: String)
+    }
+
+    ///////////
 }

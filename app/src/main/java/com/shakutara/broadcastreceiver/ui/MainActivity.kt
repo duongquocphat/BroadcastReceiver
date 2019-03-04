@@ -4,9 +4,9 @@ import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Intent
 import android.content.IntentFilter
-import android.net.ConnectivityManager
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import com.shakutara.broadcastreceiver.R
 import com.shakutara.broadcastreceiver.broadcast.MyBroadcastReceiver
@@ -14,9 +14,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity :
     AppCompatActivity(),
-    View.OnClickListener {
+    View.OnClickListener,
+    MyBroadcastReceiver.MyBroadcastReceiverListener {
+    override fun getDataFromMyBroadcastReceiver(data: String) {
+        Log.d(TAG, data)
+    }
+
     override fun onClick(v: View?) {
-        when(v){
+        when (v) {
             button ->
                 moveToMain2Activity()
         }
@@ -27,7 +32,8 @@ class MainActivity :
         startActivity(intent)
     }
 
-    private val br: BroadcastReceiver = MyBroadcastReceiver()
+    private val TAG = MainActivity::class.java.simpleName
+    private val br: BroadcastReceiver = MyBroadcastReceiver(this)
     private val filter = IntentFilter("com.duongquocphat.broadcast.MY_NOTIFICATION")
 
     override fun onCreate(savedInstanceState: Bundle?) {
